@@ -3,16 +3,19 @@
 #include <iostream>
 #include <string>
 #include <cassert>
+#include <queue>
+#include <algorithm>
 
 #include "gtest/gtest.h"
 
 #define STRINGIFY_(x) #x
 #define STRINGIFY(x) STRINGIFY_(x)
 
+const size_t DIRECTION_NUM = 4;
 std::vector<std::string> maps_path = {"ktbdmr_map.csv"};
 
 
-std::vector<std::vector<int>> loadGraphFromCSV(const std::string& file_path) {
+const std::vector<std::vector<int>> loadGraphFromCSV(const std::string& file_path) {
     std::vector<std::vector<int>> Graph;
 
     std::ifstream ifs_map_csv(file_path);
@@ -48,11 +51,80 @@ std::vector<std::vector<int>> loadGraphFromCSV(const std::string& file_path) {
         }
         node_idx++;
     }
+
+    for (auto& vec: Graph) { std::sort(vec.begin(), vec.end()); }
+
     return Graph;
 }
 
+
+
+const std::vector<size_t> solveBruteForce(const std::vector<std::vector<int>>& Graph, const size_t& DICE_NUM, const size_t& MAP_NUM) {
+    if (DICE_NUM == 0) {
+        return {0};
+    } else if (DICE_NUM < 0) {
+        std::cout << "DICE_NUM is less than 0 ??? ( " << DICE_NUM << " )" << std::endl;
+        return {};
+    }
+
+    const int NON_DIRECTION = 999;
+    std::vector<size_t> reachable_nodes;
+
+    std::vector<std::vector<char>> direction_table(Graph.size(), std::vector<char>(Graph.size(), 99));
+    for (size_t i=0; i<Graph.size(); ++i) {
+        assert(Graph[i].size() <=4 );
+        for (size_t j=0; j<Graph[i].size(); ++j) {
+            direction_table[i][Graph[i][j]] = j;
+        }
+    }
+
+
+    bool bfs_table[DICE_NUM+1][MAP_NUM][DIRECTION_NUM];
+    memset(bfs_table, 0, sizeof(bfs_table));
+
+    struct BFS_Status {
+        size_t remaining_move;
+        size_t node_num;
+        size_t direction = NON_DIRECTION;
+    };
+
+    std::queue<BFS_Status> que;
+    que.push(BFS_Status{DICE_NUM, 0, NON_DIRECTION});
+    while(not que.empty()) {
+        const BFS_Status que_front = que.front();
+        que.pop();
+        assert(Graph[que_front.node_num].size() <= 4);
+        for (const size_t& dist_node: Graph[que_front.node_num]) {
+            if (direction_table[que_front.node_num][dist_node] == que_front.direction) continue;
+
+            if ((int)que_front.remaining_move-1 > 0) {
+                que.push(BFS_Status{que_front.remaining_move-1, dist_node, direction_table[dist_node][que_front.node_num]});
+            } else {
+                assert((int)que_front.remaining_move-1 == 0);
+                bfs_table[0][dist_node][(int)direction_table[dist_node][que_front.node_num]] = true;
+            }
+        }
+    }
+
+    
+    for (size_t node=0; node < Graph.size(); ++node) {
+        bool valid = false;
+        for (size_t direction=0; direction < 4; ++direction) {
+            if (bfs_table[0][node][direction]) {
+                valid = true;
+            }
+        }
+        if (valid) {
+            reachable_nodes.emplace_back(node);
+        }
+    }
+
+    std::sort(reachable_nodes.begin(), reachable_nodes.end());
+    return reachable_nodes;
+}
+
 TEST(loadGraphFromCSVTest, checkLoadedGraphData) {
-    std::vector<std::vector<int>> Graph = loadGraphFromCSV(STRINGIFY(MAPS_DIR)"/" + maps_path[0]);
+    const std::vector<std::vector<int>> Graph = loadGraphFromCSV(STRINGIFY(MAPS_DIR)"/" + maps_path[0]);
 
     ASSERT_EQ(Graph.size(), 24);
 
@@ -84,5 +156,46 @@ TEST(loadGraphFromCSVTest, checkLoadedGraphData) {
     };
 
     ASSERT_EQ(Graph, Graph_handmade);
+
+}
+
+TEST(BFS_SolverTest, zeroDice) {
+    const size_t DICE_NUM = 0;
+    const size_t MAP_NUM = 24;
+
+    const std::vector<std::vector<int>> Graph = loadGraphFromCSV(STRINGIFY(MAPS_DIR)"/" + maps_path[0]);
+    ASSERT_EQ(Graph.size(), MAP_NUM);
+
+    const std::vector<size_t> reachable_node = solveBruteForce(Graph, DICE_NUM, MAP_NUM);
+
+    std::vector<size_t> expected_vec = {0};
+    ASSERT_EQ(reachable_node, expected_vec);
+}
+
+TEST(BFS_SolverTest, tenDice) {
+    const size_t DICE_NUM = 10;
+    const size_t MAP_NUM = 24;
+
+    const std::vector<std::vector<int>> Graph = loadGraphFromCSV(STRINGIFY(MAPS_DIR)"/" + maps_path[0]);
+    ASSERT_EQ(Graph.size(), MAP_NUM);
+
+    const std::vector<size_t> reachable_node = solveBruteForce(Graph, DICE_NUM, MAP_NUM);
+
+    std::vector<size_t> expected_vec = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 18, 19, 20, 21, 22, 23};
+    ASSERT_EQ(reachable_node, expected_vec);
+}
+
+
+TEST(IkerukanaAlgorithmTest, vsBruteForce) {
+    const size_t DICE_NUM = 10;
+    const size_t MAP_NUM = 24;
+    bool dp[DICE_NUM+1][MAP_NUM][DIRECTION_NUM];
+
+    const std::vector<std::vector<int>> Graph = loadGraphFromCSV(STRINGIFY(MAPS_DIR)"/" + maps_path[0]);
+    ASSERT_EQ(Graph.size(), MAP_NUM);
+
+    // ASSERT_TRUE(solveIkerukanaDP(Graph, DICE_NUM, dp, DICE_NUM, MAP_NUM));
+
+    const std::vector<size_t> reachable_node = solveBruteForce(Graph, DICE_NUM, MAP_NUM);
 
 }
