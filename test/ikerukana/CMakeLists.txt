@@ -18,5 +18,7 @@ if (GTest_FOUND)
     target_link_libraries(${PROJECT_NAME} GTest::gtest_main)
 endif(GTest_FOUND)
 
-# target_link_libraries(${PROJECT_NAME} ikerukana)
-# target_include_directories(${PROJECT_NAME} ${TOPDIR}/src/)
+target_link_libraries(${PROJECT_NAME} ikerukana_dp_solver)
+target_include_directories(${PROJECT_NAME} PRIVATE ${TOPDIR}/src/Solver)
+
+add_subdirectory(${TOPDIR}/src/Solver Solver)

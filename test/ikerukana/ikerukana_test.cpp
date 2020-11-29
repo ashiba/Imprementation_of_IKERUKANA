@@ -7,12 +7,12 @@
 #include <algorithm>
 #include <set>
 
+#include "ikerukanaDPSolver.hpp"
 #include "gtest/gtest.h"
 
 #define STRINGIFY_(x) #x
 #define STRINGIFY(x) STRINGIFY_(x)
 
-const size_t DIRECTION_NUM = 4;
 std::vector<std::string> maps_path = {"ktbdmr_map.csv"};
 
 
@@ -59,17 +59,6 @@ const std::vector<std::vector<int>> loadGraphFromCSV(const std::string& file_pat
 }
 
 namespace solver {
-    const std::vector<std::vector<char>> getDirectionTable(const std::vector<std::vector<int>>& Graph) {
-        std::vector<std::vector<char>> direction_table(Graph.size(), std::vector<char>(Graph.size(), 99));
-        for (size_t i=0; i<Graph.size(); ++i) {
-            assert(Graph[i].size() <=4 );
-            for (size_t j=0; j<Graph[i].size(); ++j) {
-                direction_table[i][Graph[i][j]] = j;
-            }
-        }
-        return direction_table;
-    }
-
     const std::set<size_t> solveBruteForce(const std::vector<std::vector<int>>& Graph, const size_t& DICE_NUM, const size_t& MAP_NUM) {
         if (DICE_NUM == 0) {
             return {0};
@@ -177,14 +166,13 @@ TEST(BFS_SolverTest, tenDice) {
 TEST(IkerukanaAlgorithmTest, DPvsBruteForce) {
     const size_t DICE_NUM = 10;
     const size_t MAP_NUM = 24;
-    bool dp[DICE_NUM+1][MAP_NUM][DIRECTION_NUM];
 
     const std::vector<std::vector<int>> Graph = loadGraphFromCSV(STRINGIFY(MAPS_DIR)"/" + maps_path[0]);
     ASSERT_EQ(Graph.size(), MAP_NUM);
 
-    // const std::set<size_t> reachable_node1 = solveIkerukanaDP(Graph, dp, DICE_NUM, MAP_NUM);
+    const std::set<size_t> reachable_node1 = solver::solveIkerukanaDP(Graph, DICE_NUM, MAP_NUM);
 
     const std::set<size_t> reachable_node2 = solver::solveBruteForce(Graph, DICE_NUM, MAP_NUM);
 
-    // ASSERT_EQ(reachable_node1, reachable_node2);
+    ASSERT_EQ(reachable_node1, reachable_node2);
 }
