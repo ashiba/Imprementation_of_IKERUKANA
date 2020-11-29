@@ -186,7 +186,7 @@ TEST(BFS_SolverTest, tenDice) {
 }
 
 
-TEST(IkerukanaAlgorithmTest, vsBruteForce) {
+TEST(IkerukanaAlgorithmTest, DPvsBruteForce) {
     const size_t DICE_NUM = 10;
     const size_t MAP_NUM = 24;
     bool dp[DICE_NUM+1][MAP_NUM][DIRECTION_NUM];
@@ -194,8 +194,9 @@ TEST(IkerukanaAlgorithmTest, vsBruteForce) {
     const std::vector<std::vector<int>> Graph = loadGraphFromCSV(STRINGIFY(MAPS_DIR)"/" + maps_path[0]);
     ASSERT_EQ(Graph.size(), MAP_NUM);
 
-    // ASSERT_TRUE(solveIkerukanaDP(Graph, DICE_NUM, dp, DICE_NUM, MAP_NUM));
+    // const std::vector<size_t> reachable_node1 = solveIkerukanaDP(Graph, DICE_NUM, dp, DICE_NUM, MAP_NUM);
 
-    const std::vector<size_t> reachable_node = solveBruteForce(Graph, DICE_NUM, MAP_NUM);
+    const std::vector<size_t> reachable_node2 = solveBruteForce(Graph, DICE_NUM, MAP_NUM);
 
+    // ASSERT_EQ(reachable_node1, reachable_node2);
 }
