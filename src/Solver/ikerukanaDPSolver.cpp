@@ -10,9 +10,6 @@
 
 #include "ikerukanaDPSolver.hpp"
 
-#define STRINGIFY_(x) #x
-#define STRINGIFY(x) STRINGIFY_(x)
-
 
 namespace solver {
     const size_t DIRECTION_NUM = 4;
