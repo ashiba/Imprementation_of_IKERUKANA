@@ -7,7 +7,7 @@ set(CMAKE_CXX_FLAGS "-O2 -Wall -march=native")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
 
 
-get_filename_component(MAPS_ABSOLUTE_PATH "./maps/" ABSOLUTE)
+get_filename_component(MAPS_ABSOLUTE_PATH "${TOPDIR}/maps/" ABSOLUTE)
 add_definitions(-D MAPS_DIR=${MAPS_ABSOLUTE_PATH})
 message(STATUS ${MAPS_ABSOLUTE_PATH})
 

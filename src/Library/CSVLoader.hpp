@@ -4,6 +4,6 @@
 #include <vector>
 #include <string>
 
-const std::vector<std::vector<int>> loadGraphFromCSV(const std::string& file_path);
+const std::vector<std::vector<int>> loadGraphFromCSV(const std::string& file_path, std::vector<int>& users_status);
 
 #endif

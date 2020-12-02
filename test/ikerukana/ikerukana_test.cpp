@@ -60,7 +60,8 @@ namespace solver {
 }
 
 TEST(loadGraphFromCSVTest, checkLoadedGraphData) {
-    const std::vector<std::vector<int>> Graph = loadGraphFromCSV(STRINGIFY(MAPS_DIR)"/" + maps_path[0]);
+    std::vector<int> users_status;
+    const std::vector<std::vector<int>> Graph = loadGraphFromCSV(STRINGIFY(MAPS_DIR)"/" + maps_path[0], users_status);
 
     ASSERT_EQ(Graph.size(), 24);
 
@@ -99,7 +100,8 @@ TEST(BFS_SolverTest, zeroDice) {
     const size_t DICE_NUM = 0;
     const size_t MAP_NUM = 24;
 
-    const std::vector<std::vector<int>> Graph = loadGraphFromCSV(STRINGIFY(MAPS_DIR)"/" + maps_path[0]);
+    std::vector<int> users_status;
+    const std::vector<std::vector<int>> Graph = loadGraphFromCSV(STRINGIFY(MAPS_DIR)"/" + maps_path[0], users_status);
     ASSERT_EQ(Graph.size(), MAP_NUM);
 
     const std::set<size_t> reachable_node = solver::solveBruteForce(Graph, DICE_NUM, MAP_NUM);
@@ -112,7 +114,8 @@ TEST(BFS_SolverTest, tenDice) {
     const size_t DICE_NUM = 10;
     const size_t MAP_NUM = 24;
 
-    const std::vector<std::vector<int>> Graph = loadGraphFromCSV(STRINGIFY(MAPS_DIR)"/" + maps_path[0]);
+    std::vector<int> users_status;
+    const std::vector<std::vector<int>> Graph = loadGraphFromCSV(STRINGIFY(MAPS_DIR)"/" + maps_path[0], users_status);
     ASSERT_EQ(Graph.size(), MAP_NUM);
 
     const std::set<size_t> reachable_node = solver::solveBruteForce(Graph, DICE_NUM, MAP_NUM);
@@ -126,7 +129,8 @@ TEST(IkerukanaAlgorithmTest, DPvsBruteForce) {
     const size_t DICE_NUM = 10;
     const size_t MAP_NUM = 24;
 
-    const std::vector<std::vector<int>> Graph = loadGraphFromCSV(STRINGIFY(MAPS_DIR)"/" + maps_path[0]);
+    std::vector<int> users_status;
+    const std::vector<std::vector<int>> Graph = loadGraphFromCSV(STRINGIFY(MAPS_DIR)"/" + maps_path[0], users_status);
     ASSERT_EQ(Graph.size(), MAP_NUM);
 
     const std::set<size_t> reachable_node1 = solver::solveIkerukanaDP(Graph, DICE_NUM, MAP_NUM);
