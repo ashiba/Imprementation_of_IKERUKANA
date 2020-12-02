@@ -21,14 +21,17 @@ namespace {
     }
 }
 
-const std::vector<std::vector<int>> loadGraphFromCSV(const std::string& file_path, std::vector<int>& users_status) {
-    users_status.clear();
+const std::vector<std::vector<int>> loadGraphFromCSV(const std::string& file_path, std::vector<int>& players_pos, int& BONBI_player_num) {
+    players_pos.clear();
 
     std::vector<std::vector<int>> Graph;
 
     std::ifstream ifs_map_csv(file_path);
     std::cout << "Opening " << file_path << std::endl;
-    assert(ifs_map_csv);
+    if (not ifs_map_csv) {
+        std::cout << file_path << " can't be opened." << std::endl;
+        exit(1);
+    }
 
     std::string buf;
     size_t node_idx = 0;
@@ -43,7 +46,7 @@ const std::vector<std::vector<int>> loadGraphFromCSV(const std::string& file_pat
 
     // Following node_num lines
     for (size_t i=0; i<node_num; ++i) {
-        getline(ifs_map_csv, buf);
+        assert(getline(ifs_map_csv, buf));
         std::vector<int> input_values = getSeparated(buf);
 
         for (const size_t& val: input_values) {
@@ -53,21 +56,30 @@ const std::vector<std::vector<int>> loadGraphFromCSV(const std::string& file_pat
         node_idx++;
     }
 
-    // Last line
+    // load player num
+    assert(getline(ifs_map_csv, buf)); std::cout << "players_num" << buf << std::endl;
+    assert(buf.find(',') == std::string::npos);
+    const size_t player_num = stoi(buf);
+
+    // load players_pos
     assert(getline(ifs_map_csv, buf));
     std::vector<int> input_values = getSeparated(buf);
-    if (input_values.size() > 4) {
-        std::cerr << "Users status should be less than or equal to 4" << std::endl;
+    if (input_values.size() > player_num) {
+        std::cerr << "players positions sequence should be less than or equal to player_num" << std::endl;
         exit(1);
     }
-
     for (const size_t& val: input_values) {
-        if (val != 0 and val != 1) {
-            std::cerr << "Users status value should be 0 or 1" << std::endl;
+        if (val < 0 or val >= node_num) {
+            std::cerr << "Invalid players positions value" << std::endl;
             exit(1);
         }
-        users_status.emplace_back(val);
+        players_pos.emplace_back(val);
     }
+
+    // load BONBI data
+    assert(getline(ifs_map_csv, buf));
+    assert(buf.find(',') == std::string::npos);
+    BONBI_player_num = stoi(buf);
 
     
     for (auto& vec: Graph) { std::sort(vec.begin(), vec.end()); }
