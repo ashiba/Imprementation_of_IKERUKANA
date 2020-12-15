@@ -8,13 +8,22 @@
 
 namespace solver{
     const size_t DIRECTION_NUM = 4;
+    const int MAX_PLAYERS_NUM = 4;
     const int NON_DIRECTION = 999;
 
     struct BFS_Status {
-        size_t remaining_move;
-        size_t node_num;
-        size_t direction = NON_DIRECTION;
+        int remaining_move;
+        int node_num;
+        int direction = NON_DIRECTION;
     };
+
+    struct BFS_Status_with_bonbi {
+        int remaining_move;
+        int node_num;
+        int direction = NON_DIRECTION;
+        int player_with_BONBI_id;
+    };
+
     
     inline const std::vector<std::vector<char>> getDirectionTable(const std::vector<std::vector<int>>& Graph) {
         std::vector<std::vector<char>> direction_table(Graph.size(), std::vector<char>(Graph.size(), 99));

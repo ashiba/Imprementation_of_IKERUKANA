@@ -45,8 +45,8 @@ namespace solver {
                     bool& dp_target_elm = dp[que_front.remaining_move-1][dist_node][(size_t)direction_table[dist_node][que_front.node_num]];
                     if (not dp_target_elm) {
                         que.push(BFS_Status{que_front.remaining_move-1, dist_node, (size_t)direction_table[dist_node][que_front.node_num]});
+                        dp_target_elm = true;
                     }
-                    dp_target_elm = true;
                 }
             }
         }
