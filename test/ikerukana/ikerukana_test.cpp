@@ -43,14 +43,15 @@ namespace solver {
             const BFS_Status que_front = que.front();
             que.pop();
             assert(Graph[que_front.node_num].size() <= 4);
-            for (const size_t& dist_node: Graph[que_front.node_num]) {
-                if ((size_t)direction_table[que_front.node_num][dist_node] == que_front.direction) continue;
+            
+            if ((int)que_front.remaining_move <= 0 ) {
+                assert((int)que_front.remaining_move == 0);
+                reachable_nodes.insert(que_front.node_num);
+            } else {
+                for (const size_t& dist_node: Graph[que_front.node_num]) {
+                    if ((size_t)direction_table[que_front.node_num][dist_node] == que_front.direction) continue;
 
-                if ((int)que_front.remaining_move-1 > 0) {
                     que.push(BFS_Status{que_front.remaining_move-1, dist_node, (size_t)direction_table[dist_node][que_front.node_num]});
-                } else {
-                    assert((int)que_front.remaining_move-1 == 0);
-                    reachable_nodes.insert(dist_node);
                 }
             }
         }
