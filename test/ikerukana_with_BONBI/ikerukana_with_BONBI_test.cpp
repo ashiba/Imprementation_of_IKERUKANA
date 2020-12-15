@@ -8,7 +8,7 @@
 #include <set>
 #include <array>
 
-#include "ikerukanaDPSolver.hpp"
+#include "IkerukanaWithBonbiDPSolver.hpp"
 #include "CSVLoader.hpp"
 #include "gtest/gtest.h"
 

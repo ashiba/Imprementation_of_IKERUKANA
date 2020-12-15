@@ -8,7 +8,7 @@
 #include <cstring>
 #include <set>
 
-#include "ikerukanaDPSolver.hpp"
+#include "NormalIkerukanaDPSolver.hpp"
 
 
 namespace solver {

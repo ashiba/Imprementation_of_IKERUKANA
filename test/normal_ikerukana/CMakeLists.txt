@@ -18,8 +18,8 @@ if (GTest_FOUND)
     target_link_libraries(${PROJECT_NAME} GTest::gtest_main)
 endif(GTest_FOUND)
 
-target_link_libraries(${PROJECT_NAME} ikerukana_dp_solver csv_loader)
-target_include_directories(${PROJECT_NAME} PRIVATE ${TOPDIR}/src/Solver ${TOPDIR}/src/Library)
+target_link_libraries(${PROJECT_NAME} normal_ikerukana_dp_solver csv_loader)
+target_include_directories(${PROJECT_NAME} PRIVATE ${TOPDIR}/src/Solver/NormalIkerukanaDPSolver ${TOPDIR}/src/Library)
 
-add_subdirectory(${TOPDIR}/src/Solver Solver)
-add_subdirectory(${TOPDIR}/src/Library csv_loader)
+add_subdirectory(${TOPDIR}/src/Solver/NormalIkerukanaDPSolver NormalIkerukanaDPSolver)
+add_subdirectory(${TOPDIR}/src/Library Library)

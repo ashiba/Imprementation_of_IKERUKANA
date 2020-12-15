@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <set>
 
-#include "ikerukanaDPSolver.hpp"
+#include "NormalIkerukanaDPSolver.hpp"
 #include "CSVLoader.hpp"
 #include "gtest/gtest.h"
 
