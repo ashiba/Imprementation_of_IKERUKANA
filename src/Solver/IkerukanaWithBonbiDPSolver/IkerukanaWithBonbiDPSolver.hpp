@@ -4,9 +4,10 @@
 #include <vector>
 #include <cstddef>
 #include <set>
+#include <array>
 
 namespace solver {
-    const std::set<size_t> solveIkerukanaDP(const std::vector<std::vector<int>>& Graph, const size_t& DICE_NUM, const size_t& MAP_NUM);
+    const std::array<std::set<int>, 2> solveIkerukanaDP(const std::vector<std::vector<int>>& Graph, const std::vector<int>& players_pos, const int& BONBI_playler_id, const int& DICE_NUM, const int& MAP_NUM);
 }
 
 #endif

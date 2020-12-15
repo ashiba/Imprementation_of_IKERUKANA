@@ -2,7 +2,6 @@
 #include <queue>
 #include <iostream>
 #include <cassert>
-// #include <algorithm>
 #include <cstring>
 #include <set>
 
@@ -23,33 +22,33 @@ namespace solver {
         }
 
         const int MY_PLAYER_ID = 0;
-        const int NON_DIRECTION = 999;
         const int NO_BONBI = 0;
         const int WITH_BONBI = 1;
         std::array<std::set<int>, 2> reachable_nodes;
 
 
-
         const std::vector<std::vector<char>> direction_table = getDirectionTable(Graph);
 
-        struct BFS_Status {
-            int remaining_move;
-            int node_num;
-            int direction = NON_DIRECTION;
-            int player_with_BONBI_id;
-        };
-
-        std::queue<BFS_Status> que;
-        que.push(BFS_Status{DICE_NUM, players_pos[0], NON_DIRECTION, BONBI_playler_id});
+        std::queue<BFS_Status_with_bonbi> que;
+        que.push(BFS_Status_with_bonbi{DICE_NUM, players_pos[0], NON_DIRECTION, BONBI_playler_id});
         while(not que.empty()) {
-            const BFS_Status que_front = que.front();
+            const BFS_Status_with_bonbi que_front = que.front();
             que.pop();
             assert(Graph[que_front.node_num].size() <= 4);
-            for (const int& dist_node: Graph[que_front.node_num]) {
-                if (direction_table[que_front.node_num][dist_node] == que_front.direction) continue;
+            
+            if ((int)que_front.remaining_move <= 0) {
+                assert((int)que_front.remaining_move == 0);
+                if (que_front.player_with_BONBI_id == MY_PLAYER_ID) {
+                    reachable_nodes[WITH_BONBI].insert(que_front.node_num);
+                } else {
+                    reachable_nodes[WITH_BONBI].insert(que_front.node_num);
+                    reachable_nodes[NO_BONBI  ].insert(que_front.node_num);
+                }
+            } else {
+                for (const int& dist_node: Graph[que_front.node_num]) {
+                    if (direction_table[que_front.node_num][dist_node] == que_front.direction) continue;
 
-                int new_player_with_BONBI_id;
-                if ((int)que_front.remaining_move-1 > 0) {
+                    int new_player_with_BONBI_id;
                     const std::vector<int> the_player_ids = whichPlayersOn(dist_node, players_pos);
                     const bool does_anyone_on_dist_node_has_BONBIE = isVectorIncludesTheID(the_player_ids, que_front.player_with_BONBI_id);
 
@@ -67,15 +66,7 @@ namespace solver {
                         std::cout << "Something is wrog if you reached here." << std::endl;
                         exit(1);
                     }
-                    que.push(BFS_Status{que_front.remaining_move-1, dist_node, direction_table[dist_node][que_front.node_num], new_player_with_BONBI_id});
-                } else {
-                    assert((int)que_front.remaining_move-1 == 0);
-                    if (que_front.player_with_BONBI_id == MY_PLAYER_ID) {
-                        reachable_nodes[WITH_BONBI].insert(dist_node);
-                    } else {
-                        reachable_nodes[WITH_BONBI].insert(dist_node);
-                        reachable_nodes[NO_BONBI  ].insert(dist_node);
-                    }
+                    que.push(BFS_Status_with_bonbi{que_front.remaining_move-1, dist_node, direction_table[dist_node][que_front.node_num], new_player_with_BONBI_id});
                 }
             }
         }
