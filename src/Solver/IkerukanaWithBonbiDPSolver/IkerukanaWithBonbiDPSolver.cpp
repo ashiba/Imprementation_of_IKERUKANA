@@ -7,22 +7,9 @@
 #include <set>
 
 #include "IkerukanaWithBonbiDPSolver.hpp"
+#include "solver_util.hpp"
 
-namespace solver {
-    const size_t DIRECTION_NUM = 4;
-    
-    const std::vector<std::vector<char>> getDirectionTable(const std::vector<std::vector<int>>& Graph) {
-        std::vector<std::vector<char>> direction_table(Graph.size(), std::vector<char>(Graph.size(), 99));
-        for (size_t i=0; i<Graph.size(); ++i) {
-            assert(Graph[i].size() <=4 );
-            for (size_t j=0; j<Graph[i].size(); ++j) {
-                direction_table[i][Graph[i][j]] = j;
-            }
-        }
-        return direction_table;
-    }
-
-
+namespace solver {    
     const std::set<size_t> solveIkerukanaDP(const std::vector<std::vector<int>>& Graph, const size_t& DICE_NUM, const size_t& MAP_NUM) {
         if (DICE_NUM == 0) {
             return {0};
