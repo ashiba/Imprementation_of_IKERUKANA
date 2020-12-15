@@ -2,6 +2,8 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include <fstream>
+#include <cassert>
 
 class UnionFind{
 private:
@@ -63,7 +65,7 @@ struct edge {
 
 const std::vector<std::vector<size_t>> genHWDenceGridGraph(const size_t& map_height, const size_t& map_width) {
     auto encodeIndex = [map_width](const size_t& y, const size_t& x) { return y*map_width + x; };
-
+    const int additional_node_num = map_height*map_width/4;
     const size_t node_num = map_height*map_width;
     std::vector<std::vector<size_t>> grid_graph(node_num);
 
@@ -79,13 +81,20 @@ const std::vector<std::vector<size_t>> genHWDenceGridGraph(const size_t& map_hei
     const size_t SEED = 1;
     std::mt19937 engine(SEED);
     std::shuffle(all_edges.begin(), all_edges.end(), engine);
-
+int c=0;
     UnionFind uf(node_num);
+    int additional_node_count = 0;
     for (const edge& edg: all_edges) {
         if (not uf.isSame(edg.from, edg.to)) {
             uf.unite(edg.from, edg.to);
             grid_graph[edg.from].emplace_back(edg.to);
             grid_graph[edg.to].emplace_back(edg.from);
+        } else {
+            if (additional_node_count < additional_node_num) {
+                additional_node_count++;
+                grid_graph[edg.from].emplace_back(edg.to);
+                grid_graph[edg.to].emplace_back(edg.from);
+            }
         }
     }
     return grid_graph;
@@ -93,14 +102,35 @@ const std::vector<std::vector<size_t>> genHWDenceGridGraph(const size_t& map_hei
 
 
 int main() {
-    const int map_height = 3;
+    const int map_height = 10;
     const int map_width = map_height;
 
     const std::vector<std::vector<size_t>> Graph = genHWDenceGridGraph(map_height, map_width);
+
+    std::ofstream ofs("generated_" + std::to_string(map_height) + "*" + std::to_string(map_height) + "map.csv");
+
+    const int NODE_NUM = map_height*map_height;
+    ofs << NODE_NUM << std::endl;
     for (int i=0; i<Graph.size(); ++i) {
-        for (const auto& elm: Graph[i]) {
-            std::cout << "( " << i << " to " << elm << " )" << std::endl;
+        for (int j=0; j<Graph[i].size(); ++j) {
+            if (j) ofs << ',';
+            ofs << Graph[i][j];
         }
+        ofs << std::endl;
     }
 
+    const int PLAYERS_NUM = 4;
+    ofs << PLAYERS_NUM << std::endl;
+
+    std::vector<int> node_ids(NODE_NUM);
+    node_ids[0] = 0;
+    for (int i=1; i<NODE_NUM; ++i) node_ids[i] = i;
+    const size_t SEED = 1;
+    std::mt19937 engine(SEED);
+    std::shuffle(node_ids.begin()+1, node_ids.end(), engine);
+
+    ofs << node_ids[0] << "," << node_ids[1] << "," << node_ids[2] << "," << node_ids[3] << std::endl;
+    assert(node_ids[0] == 0);
+
+    ofs << 1 << std::endl;
 }
