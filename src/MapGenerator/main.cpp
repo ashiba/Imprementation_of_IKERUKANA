@@ -107,9 +107,9 @@ int main() {
 
     const std::vector<std::vector<size_t>> Graph = genHWDenceGridGraph(map_height, map_width);
 
-    std::ofstream ofs("generated_" + std::to_string(map_height) + "*" + std::to_string(map_height) + "map.csv");
+    std::ofstream ofs("generated_" + std::to_string(map_height) + "*" + std::to_string(map_width) + "map.csv");
 
-    const int NODE_NUM = map_height*map_height;
+    const int NODE_NUM = map_height*map_width;
     ofs << NODE_NUM << std::endl;
     for (int i=0; i<Graph.size(); ++i) {
         for (int j=0; j<Graph[i].size(); ++j) {
@@ -123,14 +123,18 @@ int main() {
     ofs << PLAYERS_NUM << std::endl;
 
     std::vector<int> node_ids(NODE_NUM);
-    node_ids[0] = 0;
-    for (int i=1; i<NODE_NUM; ++i) node_ids[i] = i;
+    for (int i=0; i<NODE_NUM; ++i) node_ids[i] = i;
+    if (map_height%2==1) {
+        std::swap(node_ids[0], node_ids[NODE_NUM/2]);
+    } else {
+        std::swap(node_ids[0], node_ids[NODE_NUM/2-map_width/2]);
+    }
+
     const size_t SEED = 1;
     std::mt19937 engine(SEED);
     std::shuffle(node_ids.begin()+1, node_ids.end(), engine);
 
     ofs << node_ids[0] << "," << node_ids[1] << "," << node_ids[2] << "," << node_ids[3] << std::endl;
-    assert(node_ids[0] == 0);
 
     ofs << 1 << std::endl;
 }
