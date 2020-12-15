@@ -60,43 +60,6 @@ namespace solver {
     }
 }
 
-TEST(loadGraphFromCSVTest, checkLoadedGraphData) {
-    std::vector<int> users_pos;
-    int BONBI_data;
-    const std::vector<std::vector<int>> Graph = loadGraphFromCSV(STRINGIFY(MAPS_DIR)"/" + maps_path[0], users_pos, BONBI_data);
-
-    ASSERT_EQ(Graph.size(), 24);
-
-    std::vector<std::vector<int>>Graph_handmade = {
-        {1, 3},
-        {0, 2, 23},
-        {1, 3},
-        {0, 2, 4, 5},
-        {3, 8},
-        {3, 6},
-        {5, 7, 8},
-        {6},
-        {4, 6, 9},
-        {8, 10},
-        {9, 11, 22},
-        {10, 12},
-        {11, 13},
-        {12, 14},
-        {13, 15},
-        {14, 16, 17},
-        {15, 18},
-        {15, 18},
-        {16, 17, 19},
-        {18, 20},
-        {19, 21},
-        {20, 22},
-        {10, 21},
-        {1},
-    };
-
-    ASSERT_EQ(Graph, Graph_handmade);
-
-}
 
 TEST(BFS_SolverTest, zeroDice) {
     const size_t DICE_NUM = 0;
