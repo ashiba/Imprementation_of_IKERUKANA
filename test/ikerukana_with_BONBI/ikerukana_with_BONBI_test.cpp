@@ -92,11 +92,4 @@ TEST(ikerukana_with_BONBI_test, DPvsBruteForce2) {
     const std::array<std::set<int>, 2> reachable_node2 = solver::solveBruteForce(Graph, users_pos, BONBI_data, DICE_NUM, MAP_NUM);
 
     ASSERT_EQ(reachable_node1, reachable_node2);
-
-    for (int i=0; i<2; ++i) {
-        for (const auto& elm: reachable_node1[i]) {
-            std::cout << elm << " ";
-        }
-        std::cout << std::endl;
-    }
 }
