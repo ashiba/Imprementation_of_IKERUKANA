@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-set(PROJECT_NAME run_ikerukana_test)
+set(PROJECT_NAME run_normal_ikerukana_test)
 set(TOPDIR ../..)
 
 set(CMAKE_CXX_FLAGS "-O2 -Wall -march=native")
@@ -11,7 +11,7 @@ get_filename_component(MAPS_ABSOLUTE_PATH "${TOPDIR}/maps/" ABSOLUTE)
 add_definitions(-D MAPS_DIR=${MAPS_ABSOLUTE_PATH})
 message(STATUS ${MAPS_ABSOLUTE_PATH})
 
-add_executable(${PROJECT_NAME} ikerukana_test.cpp)
+add_executable(${PROJECT_NAME} normal_ikerukana_test.cpp)
 
 find_package(GTest REQUIRED CONFIG)
 if (GTest_FOUND)

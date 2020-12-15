@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
 
 set(PROJECT_NAME run_ikerukana_with_BONBI_test)
-set(TOPDIR ../../..)
+set(TOPDIR ../..)
 
 set(CMAKE_CXX_FLAGS "-O2 -Wall -march=native")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
