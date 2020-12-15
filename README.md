@@ -1,10 +1,41 @@
-人気ゲーム、「桃太郎電鉄」の「いけるかな」機能の実装を行う。
-桃太郎電鉄、略して桃鉄は、すごろくに似たパーティである。
-桃鉄内にはプレイを手助けするための「いけるかな」という経路探索機能が搭載されている
-このリポジトリでは、この経路探索機能アルゴリズムを実装することを目指す。
-しかしこのアルゴリズムの詳細は非公開であるため、憶測で実装する必要がある。
-主なアプローチは動的計画法であり、O(DM)（ここでDはサイコロの出た目の合計値、Mはマップのマス数）の時間計算量で
-実現可能であると考えている。
+## What's this?
+This is a imprementation of IKERUKANA.  
+IKERUKANA is a function of a game MOMOTARO DENTETSU(https://www.konami.com/games/momotetsu/teiban/).  
+This repository aims to make solver program of IKERUKANA and test it.  
 
+## Directory structure
+root/    
+├ maps  
+├ src  
+├ test  
+└README.md  
 
-参考文献: http://kotodamar.hatenablog.com/entry/2016/05/23/%E6%A1%83%E5%A4%AA%E9%83%8E%E9%9B%BB%E9%89%84%E3%81%AE%E3%81%8A%E5%8A%A9%E3%81%91%E6%A9%9F%E8%83%BD%E3%80%8C%E3%81%84%E3%81%91%E3%81%BE%E3%81%99%E3%82%88%EF%BC%81%E3%80%8D%E3%81%AE%E5%AE%9F%E8%A3%85
+maps: Data of maps  
+src: Programs. Solver, Library, etc..  
+test: Test programs of IKERUKANA solver  
+
+## How to use
+
+```bash
+$ git clone {This repository}
+
+# Execute IKERUKANA program
+$ cd Imprementation_of_IKERUKANA/test/normal_ikerukana/
+$ mkdir build
+$ cd build
+$ cmake ..
+$ make
+$ ./run_normal_ikerukana_test
+
+# Execute IKERUKANA_with_BONBI program
+$ cd ../../ikerukana_with_BONBI
+$ mkdir build
+$ cd build
+$ cmake ..
+$ make
+$ ./run_ikerukana_with_BONBI_test
+```
+
+## Dependencies
+This project uses GTest library.
+You have to install it.
