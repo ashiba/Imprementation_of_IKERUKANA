@@ -21,16 +21,9 @@ namespace solver {
             return {};
         }
 
-        const int NON_DIRECTION = 999;
         std::set<size_t> reachable_nodes;
 
         const std::vector<std::vector<char>> direction_table = getDirectionTable(Graph);
-
-        struct BFS_Status {
-            size_t remaining_move;
-            size_t node_num;
-            size_t direction = NON_DIRECTION;
-        };
 
         std::queue<BFS_Status> que;
         que.push(BFS_Status{DICE_NUM, 0, NON_DIRECTION});
@@ -39,12 +32,12 @@ namespace solver {
             que.pop();
             assert(Graph[que_front.node_num].size() <= 4);
             
-            if ((int)que_front.remaining_move <= 0 ) {
+            if ((int)que_front.remaining_move <= 0 ) { // 探索終了
                 assert((int)que_front.remaining_move == 0);
                 reachable_nodes.insert(que_front.node_num);
             } else {
-                for (const size_t& dist_node: Graph[que_front.node_num]) {
-                    if ((size_t)direction_table[que_front.node_num][dist_node] == que_front.direction) continue;
+                for (const size_t& dist_node: Graph[que_front.node_num]) {  // 隣接するノードを探索
+                    if ((size_t)direction_table[que_front.node_num][dist_node] == que_front.direction) continue; // 前回通ったノードへの移動はNG
 
                     que.push(BFS_Status{que_front.remaining_move-1, dist_node, (size_t)direction_table[dist_node][que_front.node_num]});
                 }

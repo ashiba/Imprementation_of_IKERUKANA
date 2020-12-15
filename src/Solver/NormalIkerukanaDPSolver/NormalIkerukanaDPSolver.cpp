@@ -34,19 +34,20 @@ namespace solver {
             const BFS_Status que_front = que.front();
             que.pop();
             assert(Graph[que_front.node_num].size() <= 4);
-            for (const size_t& dist_node: Graph[que_front.node_num]) {
-                if ((size_t)direction_table[que_front.node_num][dist_node] == que_front.direction) continue;
 
-                bool& dp_target_elm = dp[que_front.remaining_move-1][dist_node][(size_t)direction_table[dist_node][que_front.node_num]];
-                if ((int)que_front.remaining_move-1 > 0) {
+            if ((int)que_front.remaining_move <= 0) { // 探索終了
+                assert((int)que_front.remaining_move == 0);
+                reachable_nodes.insert(que_front.node_num);
+            } else {
+                for (const size_t& dist_node: Graph[que_front.node_num]) {  // 隣接するノードを探索
+                    if ((size_t)direction_table[que_front.node_num][dist_node] == que_front.direction) continue; // 前回通ったノードへの移動はNG
+
+                    bool& dp_target_elm = dp[que_front.remaining_move-1][dist_node][(size_t)direction_table[dist_node][que_front.node_num]];
                     if (not dp_target_elm) {
                         que.push(BFS_Status{que_front.remaining_move-1, dist_node, (size_t)direction_table[dist_node][que_front.node_num]});
                     }
-                } else {
-                    assert((int)que_front.remaining_move-1 >= 0);
-                    reachable_nodes.insert(dist_node);
+                    dp_target_elm = true;
                 }
-                dp_target_elm = true;
             }
         }
 
