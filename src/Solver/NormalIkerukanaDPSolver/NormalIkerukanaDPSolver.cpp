@@ -13,7 +13,7 @@
 
 
 namespace solver {
-    const std::set<size_t> solveIkerukanaDP(const std::vector<std::vector<int>>& Graph, const size_t& DICE_NUM, const size_t& MAP_NUM) {
+    const std::set<size_t> solveIkerukanaDP(const std::vector<std::vector<int>>& Graph, const int& PLAYER_POS, const int& DICE_NUM, const int& MAP_NUM) {
         if (DICE_NUM == 0) {
             return {0};
         } else if (DICE_NUM < 0) {
@@ -29,7 +29,7 @@ namespace solver {
         memset(dp, 0, sizeof(dp));
 
         std::queue<BFS_Status> que;
-        que.push(BFS_Status{DICE_NUM, 0, NON_DIRECTION});
+        que.push(BFS_Status{DICE_NUM, PLAYER_POS, NON_DIRECTION});
         while(not que.empty()) {
             const BFS_Status que_front = que.front();
             que.pop();

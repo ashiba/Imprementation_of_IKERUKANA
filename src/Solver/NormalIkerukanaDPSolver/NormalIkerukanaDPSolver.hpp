@@ -6,7 +6,7 @@
 #include <set>
 
 namespace solver {
-    const std::set<size_t> solveIkerukanaDP(const std::vector<std::vector<int>>& Graph, const size_t& DICE_NUM, const size_t& MAP_NUM);
+    const std::set<size_t> solveIkerukanaDP(const std::vector<std::vector<int>>& Graph, const int& PLAYER_POS, const int& DICE_NUM, const int& MAP_NUM);
 }
 
 #endif

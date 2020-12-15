@@ -16,7 +16,7 @@
 #define STRINGIFY_(x) #x
 #define STRINGIFY(x) STRINGIFY_(x)
 
-std::vector<std::string> maps_path = {"ktbdmr_map_with_2players.csv", "generated_10*10map.csv", "generated_20*20map.csv"};
+std::vector<std::string> maps_path = {"ktbdmr_map_with_2players.csv", "generated_10*10map.csv", "generated_20*20map.csv", "generated_30*30map.csv"};
 
 
 TEST(ikerukana_with_BONBI_test, ktbdmr_map_with_2players) {
@@ -56,6 +56,18 @@ TEST(ikerukana_with_BONBI_test, DPExecute2) {
     std::vector<int> users_pos;
     int BONBI_data;
     const std::vector<std::vector<int>> Graph = loadGraphFromCSV(STRINGIFY(MAPS_DIR)"/" + maps_path[2], users_pos, BONBI_data);
+    ASSERT_EQ(Graph.size(), MAP_NUM);
+
+    const std::array<std::set<int>, 2> reachable_node1 = solver::solveIkerukanaDP(Graph, users_pos, BONBI_data, DICE_NUM, MAP_NUM);
+}
+
+TEST(ikerukana_with_BONBI_test, DPExecuteLarge1) {
+    const size_t DICE_NUM = 48;
+    const size_t MAP_NUM = 30*30;
+
+    std::vector<int> users_pos;
+    int BONBI_data;
+    const std::vector<std::vector<int>> Graph = loadGraphFromCSV(STRINGIFY(MAPS_DIR)"/" + maps_path[3], users_pos, BONBI_data);
     ASSERT_EQ(Graph.size(), MAP_NUM);
 
     const std::array<std::set<int>, 2> reachable_node1 = solver::solveIkerukanaDP(Graph, users_pos, BONBI_data, DICE_NUM, MAP_NUM);

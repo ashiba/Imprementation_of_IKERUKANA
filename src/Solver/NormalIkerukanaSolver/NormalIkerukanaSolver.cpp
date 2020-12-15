@@ -13,7 +13,7 @@
 
 
 namespace solver {
-    const std::set<size_t> solveBruteForce(const std::vector<std::vector<int>>& Graph, const size_t& DICE_NUM, const size_t& MAP_NUM) {
+    const std::set<size_t> solveBruteForce(const std::vector<std::vector<int>>& Graph, const int& PLAYER_POS, const int& DICE_NUM, const int& MAP_NUM) {
         if (DICE_NUM == 0) {
             return {0};
         } else if (DICE_NUM < 0) {
@@ -26,7 +26,7 @@ namespace solver {
         const std::vector<std::vector<char>> direction_table = getDirectionTable(Graph);
 
         std::queue<BFS_Status> que;
-        que.push(BFS_Status{DICE_NUM, 0, NON_DIRECTION});
+        que.push(BFS_Status{DICE_NUM, PLAYER_POS, NON_DIRECTION});
         while(not que.empty()) {
             const BFS_Status que_front = que.front();
             que.pop();
@@ -36,10 +36,10 @@ namespace solver {
                 assert((int)que_front.remaining_move == 0);
                 reachable_nodes.insert(que_front.node_num);
             } else {
-                for (const size_t& dist_node: Graph[que_front.node_num]) {  // 隣接するノードを探索
-                    if ((size_t)direction_table[que_front.node_num][dist_node] == que_front.direction) continue; // 前回通ったノードへの移動はNG
+                for (const int& dist_node: Graph[que_front.node_num]) {  // 隣接するノードを探索
+                    if (direction_table[que_front.node_num][dist_node] == que_front.direction) continue; // 前回通ったノードへの移動はNG
 
-                    que.push(BFS_Status{que_front.remaining_move-1, dist_node, (size_t)direction_table[dist_node][que_front.node_num]});
+                    que.push(BFS_Status{que_front.remaining_move-1, dist_node, direction_table[dist_node][que_front.node_num]});
                 }
             }
         }
