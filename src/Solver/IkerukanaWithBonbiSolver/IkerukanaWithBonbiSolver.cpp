@@ -63,7 +63,7 @@ namespace solver {
                         new_player_with_BONBI_id = the_player_ids[0];
 
                     } else { // 空集合
-                        std::cout << "Something is wrog if you reached here." << std::endl;
+                        std::cout << "Something is wrong if you reached here." << std::endl;
                         exit(1);
                     }
                     que.push(BFS_Status_with_bonbi{que_front.remaining_move-1, dist_node, direction_table[dist_node][que_front.node_num], new_player_with_BONBI_id});
