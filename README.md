@@ -18,7 +18,8 @@ test: Test programs of IKERUKANA solver
 This project uses GTest(GoogleTest) library.
 You have to install it.
 
-This is a link to GoogleTest GitHub repository: https://github.com/google/googletest
+This is a link to GoogleTest GitHub repository: https://github.com/google/googletest  
+
 For Japanese people (or you can read Japanese): I recommend this web site to learn detailed procedure for installing GoogleTest.
 https://qiita.com/shohirose/items/30e39949d8bf990b0462
 
